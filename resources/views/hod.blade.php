@@ -1,7 +1,6 @@
-
+// resources/views/admin.blade.php
 
 @extends('layouts.auth')
-
 
 @section('content')
     <div class="container">
@@ -11,7 +10,7 @@
                     <div class="card-header">Dashboard</div>
 
                     <div class="card-body">
-                        Hi there, regular user
+                        Hi boss!
                     </div>
                 </div>
             </div>

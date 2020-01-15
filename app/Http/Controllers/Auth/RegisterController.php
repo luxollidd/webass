@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\User;
+use App\Hod;
+use App\Student;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
@@ -38,7 +41,8 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+        $this->middleware('guest:hod')->except('logout');
+        $this->middleware('guest:student')->except('logout');
     }
 
     /**
@@ -69,5 +73,35 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+    }
+
+    public function showHodRegisterForm(){
+        return view('auth.register', ['url' => 'hod']);
+    }
+
+    public function showStudentRegisterForm(){
+        return view('auth.register', ['url' => 'student']);
+    }
+
+    protected function createHod(Request $request)
+    {
+        $this->validator($request->all())->validate();
+        $hod = Hod::create([
+            'name' => $request['name'],
+            'email' => $request['email'],
+            'password' => Hash::make($request['password']),
+        ]);
+        return redirect()->intended('login/hod');
+    }
+
+    protected function createStudent(Request $request)
+    {
+        $this->validator($request->all())->validate();
+        $student = Student::create([
+            'name' => $request['name'],
+            'email' => $request['email'],
+            'password' => Hash::make($request['password']),
+        ]);
+        return redirect()->intended('login/student');
     }
 }
